@@ -10,9 +10,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
@@ -29,7 +29,7 @@ public class Insert_from_Excel {
 	{
 
 
-		FileInputStream fis = new FileInputStream("D:\\Eclipse_Excel\\C270_30_01_2024.xlsx");
+		FileInputStream fis = new FileInputStream("E:\\Eclipse_Excel\\Ad_23_07.xlsx");
 
 		@SuppressWarnings("resource")
 		XSSFWorkbook wb = new XSSFWorkbook(fis);
@@ -40,9 +40,9 @@ public class Insert_from_Excel {
 		// Web Driver setup
 		WebDriverManager.chromedriver().setup();
 		
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--remote-allow-origins=*");
-		ChromeDriver wd = new ChromeDriver(options);
+		//ChromeOptions options = new ChromeOptions();
+		//options.addArguments("--remote-allow-origins=*");
+		WebDriver wd = new ChromeDriver();
 		wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		
 		// Create Object
@@ -50,7 +50,7 @@ public class Insert_from_Excel {
 		XSSFCell cell = null;
 		
 		// Login
-		selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "meflex", "meflex", "5820469137");
+		selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "meflex", "meflex", "1537092648");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "land23", "land@23", "20230401");
 		Thread.sleep(2000);
 		
@@ -162,7 +162,7 @@ public class Insert_from_Excel {
 					cell.setCellValue("PASS");
 				} 
 				 
-				FileOutputStream outputStream = new FileOutputStream("D:\\Eclipse_Excel\\C270_30_01_2024_01.xlsx");
+				FileOutputStream outputStream = new FileOutputStream("E:\\Eclipse_Excel\\Ad_23_07_01.xlsx");
 				wb.write(outputStream);
 				
 				System.out.println(i +":-" + sheet.getRow(i).getCell(0).getRawValue() + ":" + text);
@@ -177,7 +177,7 @@ public class Insert_from_Excel {
 			{
 				cell = sheet.getRow(i).createCell(6);
 				cell.setCellValue("FAIL");
-				FileOutputStream outputStream = new FileOutputStream("D:\\Eclipse_Excel\\C270_30_01_2024_01.xlsx");
+				FileOutputStream outputStream = new FileOutputStream("E:\\Eclipse_Excel\\Ad_23_07_02.xlsx");
 				wb.write(outputStream);
 				WebElement Batch= wd.findElement(By.xpath("//i[@class='md md-details']"));
 				a.moveToElement(Batch).release().build().perform();
