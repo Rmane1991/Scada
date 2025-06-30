@@ -17,7 +17,7 @@ import org.openqa.selenium.interactions.Actions;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import method.Utility;
 
-public class Send_To_MCGM {
+public class Send_To_MCGM extends Utility {
 
 	public static void main(String[] args) throws InterruptedException, IOException {
 
@@ -39,9 +39,9 @@ public class Send_To_MCGM {
 		wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
 		// Create Object
-		Utility selUtil = new Utility();
+		//Utility selUtil = new Utility();
 		XSSFCell cell = null;
-		selUtil.login_BMC(wd, "http://www.bmc-scada.online/app/default.aspx", "ME", "MRMA!@489");
+		login_BMC(wd, "http://www.bmc-scada.online/app/default.aspx", "ME", "MRMA!@489");
 
 		@SuppressWarnings("unused")
 		Actions a = new Actions(wd);

@@ -19,7 +19,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import method.Utility;
 
-public class SavePDF {
+public class SavePDF extends Utility {
 
     public static void main(String[] args) throws IOException, InterruptedException, AWTException {
         FileInputStream fis = new FileInputStream("E:\\Manaci_Vijay\\Flex_1004_To_1564.xlsx");
@@ -50,9 +50,9 @@ public class SavePDF {
         ChromeDriver wd = new ChromeDriver(options);
         wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-        Utility selUtil = new Utility();
+       // Utility selUtil = new Utility();
         XSSFCell cell = null;
-        selUtil.login_BMC(wd, "http://www.bmc-scada.online/app/default.aspx", "ME", "MRMA!@489");
+        login_BMC(wd, "http://www.bmc-scada.online/app/default.aspx", "ME", "MRMA!@489");
         
     	
 		//Actions a = new Actions(wd);
