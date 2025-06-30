@@ -26,12 +26,6 @@ public class Utility
 public static  WebDriver  startBrowser (String browsename,String URL ) 
 	
 	{
-		/*
-	   Properties prop= new Properties();
-	   FileInputStream fis=new FileInputStream("/LTM/src/GlobalData.properties");
-	   prop.load(fis);
-	   String browsename=prop.getProperty("browser");
-		*/
 		if (browsename.equalsIgnoreCase("chrome"))
 		{
 			WebDriverManager.chromedriver().setup();
@@ -51,7 +45,8 @@ public static  WebDriver  startBrowser (String browsename,String URL )
 	
 	
 
-public static void waitForLoaderToDisappear(WebDriver driver) {
+public static void waitForLoaderToDisappear(WebDriver driver) 
+{
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40)); // Set timeout as required
     wait.until(driver1 -> {
         JavascriptExecutor js = (JavascriptExecutor) driver1;
@@ -74,7 +69,7 @@ public static void waitForLoaderToDisappear(WebDriver driver) {
 
 		{
 
-			e.printStackTrace();
+			//e.printStackTrace();
 
 		}
 
@@ -120,7 +115,7 @@ public static void waitForLoaderToDisappear(WebDriver driver) {
 
 		{
 
-			e.printStackTrace();
+			//e.printStackTrace();
 
 		}
 
