@@ -18,7 +18,7 @@ import method.Utility;
 public class AttachRoute {
 
 	public static void main(String[] args) throws InterruptedException, IOException {
-		FileInputStream fis = new FileInputStream("D:\\Eclipse_Excel\\Sample_Route.xlsx");
+		FileInputStream fis = new FileInputStream("E:\\Eclipse_Excel\\Update_Route_Vijay.xlsx");
 
 		@SuppressWarnings("resource")
 		XSSFWorkbook wb = new XSSFWorkbook(fis);
@@ -31,6 +31,7 @@ public class AttachRoute {
 		WebDriverManager.chromedriver().setup();
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--remote-allow-origins=*");
+		options.addArguments("force-device-scale-factor=0.8");
 		ChromeDriver wd = new ChromeDriver(options);
 		wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 
@@ -39,8 +40,12 @@ public class AttachRoute {
 		XSSFCell cell = null;
 
 		// Login
-		selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "meflex", "meflex", "1936587042");
+		//For ME Infra
+		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "meflex", "meflex", "1936587042");
 
+		//For RB
+		selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "rbcrmc", "rbc#24", "213241237");
+		
 		// Mouse action
 		Actions a = new Actions(wd);
 		Thread.sleep(2000);
@@ -55,7 +60,7 @@ public class AttachRoute {
 		wd.findElement(By.xpath("(//a[normalize-space()='MCGM Batch'])[1]")).click();
 		Thread.sleep(1000);
 
-		for (int i = 1; i <= rowCount; i++) {
+		for (int i = 1386; i <= rowCount; i++) {
 
 			// Enter Batch No From
 			WebElement BatchFrom = wd.findElement(By.id("ctl00_cphBody_txtBatchFrom"));
@@ -65,7 +70,7 @@ public class AttachRoute {
 			// Enter Batch No To
 			WebElement BatchTo = wd.findElement(By.id("ctl00_cphBody_txtBatchTo"));
 			BatchTo.clear();
-			BatchTo.sendKeys(sheet.getRow(i).getCell(1).getRawValue());
+			BatchTo.sendKeys(sheet.getRow(i).getCell(0).getRawValue());
 			Thread.sleep(1000);
 			
 			//Click ON search button 
@@ -74,11 +79,11 @@ public class AttachRoute {
 			
 			// Click Attch route
 			wd.findElement(By.xpath("//input[@id='ctl00_cphBody_gvBatchList_ctl02_imgRply']")).click();
-			Thread.sleep(3000);
+			Thread.sleep(5000);
 			
 			//Set Route Name
 			WebElement route = wd.findElement(By.xpath("//select[@id='ctl00_cphBody_drpRoute']"));
-			selUtil.Dropdown(route, sheet.getRow(i).getCell(2).getStringCellValue());
+			selUtil.Dropdown(route, sheet.getRow(i).getCell(1).getStringCellValue());
 			Thread.sleep(1000);
 
 			// Click on Map
@@ -89,25 +94,93 @@ public class AttachRoute {
 			btnupdate.click();
 			Thread.sleep(3000);
 
-			cell = sheet.getRow(i).createCell(3);
-			WebElement return_msg = wd.findElement(By.xpath("//p[normalize-space()='Trip updated successfully.']"));
-			String Abc = return_msg.getText();
-
-			if (Abc.contains("Trip updated successfully.")) 
+			cell = sheet.getRow(i).createCell(2);
+			
+			String Abc=null, Abc1=null,Abc2=null;
+			
+			/*
+			try 
 			{
-				cell.setCellValue("PASS");
+				WebElement return_msg = wd.findElement(By.xpath("//p[normalize-space()='Trip updated successfully.']"));
+				 Abc = return_msg.getText();
+			}
+			catch(Exception e)
+			{
+				WebElement return_msg = wd.findElement(By.xpath("//p[normalize-space()='Trip of the same time already exist']"));
+			    Abc1 = return_msg.getText();
+			}
+			
+			catch(Exception e2)
+			{
+				WebElement return_msg = wd.findElement(By.xpath("//p[normalize-space()='Trip already created from FlexMirror']"));
+			    Abc2 = return_msg.getText();
+				
+			}
+			
+			*/
+			
+			//String Abc = "";
+			try {
+			    WebElement return_msg = wd.findElement(By.xpath("//p[normalize-space()='Trip updated successfully.']"));
+			    Abc = return_msg.getText();
+			} catch (Exception e) 
+			{
+			   
+			    try {
+			        WebElement return_msg = wd.findElement(By.xpath("//p[normalize-space()='Trip of the same time already exist']"));
+			        Abc1 = return_msg.getText();
+			    } catch (Exception e1) 
+			    {
+			        try 
+			        {
+			            WebElement return_msg = wd.findElement(By.xpath("//p[normalize-space()='Trip already created from FlexMirror']"));
+			            Abc2 = return_msg.getText();
+			        } catch (Exception e2) 
+			        {
+			           // Abc = "No matching element found";
+			        }
+			    }
 			}
 
-			FileOutputStream outputStream = new FileOutputStream("D:\\Eclipse_Excel\\Sample_Route_01.xlsx");
+
+			/*
+			if (Abc.contains("Trip updated successfully.")|| Abc1.contains("Trip of the same time already exist")) 
+			{
+				cell.setCellValue("PASS");
+			}*/
+			
+			
+			
+			if (	(Abc != null && Abc.contains("Trip updated successfully.")) ||
+				    (Abc1 != null && Abc1.contains("Trip of the same time already exist"))||
+				    (Abc2 != null && Abc2.contains("Trip already created from FlexMirror")))
+			{
+				if ((Abc != null && Abc.contains("Trip updated successfully."))) 
+				{
+					cell.setCellValue(Abc);
+				} 
+				else if  ((Abc1 != null && Abc1.contains("Trip of the same time already exist")))
+				{
+					cell.setCellValue(Abc1);
+				}
+				
+				else
+				{
+					cell.setCellValue(Abc2);
+				}
+				    
+			}
+
+			FileOutputStream outputStream = new FileOutputStream("E:\\Eclipse_Excel\\Update_Route_Vijay_01.xlsx");
 			wb.write(outputStream);
 			Thread.sleep(3000);
 			wd.findElement(By.xpath("//button[contains(text(),'OK')]")).click();
 
-			Thread.sleep(70000);
+			Thread.sleep(60000);
 		}
 		
 		System.out.println("Its Done");
-		wd.close();
+		wd.quit();
 	}
 
 }

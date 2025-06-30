@@ -3,6 +3,7 @@ package method;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -12,6 +13,9 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.NoAlertPresentException;
 
 public class Utility
 
@@ -46,15 +50,16 @@ public static  WebDriver  startBrowser (String browsename,String URL )
 	}
 	
 	
-    
-	
-	
-	
-	
-	
-	
-	
-	
+
+public static void waitForLoaderToDisappear(WebDriver driver) {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40)); // Set timeout as required
+    wait.until(driver1 -> {
+        JavascriptExecutor js = (JavascriptExecutor) driver1;
+        String script = "return document.getElementById('ctl00_cphBody_upLoader').style.display === 'none';";
+        return (Boolean) js.executeScript(script);
+    });
+}
+
 	
 	public boolean isDisaplyed(By Locator, WebDriver wd, long tm)
 	{
@@ -77,6 +82,30 @@ public static  WebDriver  startBrowser (String browsename,String URL )
 
 	}
 
+	
+	
+	
+	 public void acceptAlertIfPresent() {
+	        try {
+	            Alert alert = wd.switchTo().alert();
+	            System.out.println("Alert found: " + alert.getText());
+	            alert.accept();
+	            System.out.println("Alert accepted.");
+	        } catch (NoAlertPresentException e) {
+	            System.out.println("No alert present.");
+	        }
+	    }
+	
+	 
+	 
+	 public static boolean isAlertPresent(WebDriver wd1) {
+	        try {
+	        	wd1.switchTo().alert();
+	            return true;
+	        } catch (NoAlertPresentException e) {
+	            return false;
+	        }
+	 }
 	
 	public boolean isInvisible(By Locator, WebDriver wd, long tm)
 	{

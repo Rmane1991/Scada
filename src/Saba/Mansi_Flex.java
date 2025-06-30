@@ -19,10 +19,9 @@ import org.openqa.selenium.support.ui.Select;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import method.Utility;
 
+public class Mansi_Flex extends Utility {
 
 
-public class Insert_from_Excel extends Utility
-{
 
 	public static void main(String[] args) throws IOException, InterruptedException 
 	{
@@ -66,10 +65,12 @@ public class Insert_from_Excel extends Utility
 		// For read and write data from excel
 		System.out.println("No of Record Found Into Excel :- " + rowCount);
 
-		for (int i = 1398; i <= rowCount; i++) //for (int i = rowCount; i >= 1; i--)
+		for (int i = 1447; i <= rowCount; i++) //for (int i = rowCount; i >= 1; i--)
 			{
 			try 
 			{
+				cell = sheet.getRow(i).createCell(6);
+				
 				//Enter Batch No From
  				WebElement BatchFrom = wd.findElement(By.id("ctl00_cphBody_txtBatchFrom"));
 				BatchFrom.sendKeys(sheet.getRow(i).getCell(0).getRawValue());
@@ -88,6 +89,14 @@ public class Insert_from_Excel extends Utility
 				if (selUtil.isDisaplyed(By.id("ctl00_cphBody_drpCustomer"), wd, 15) == true);
 				waitForLoaderToDisappear(wd);	
 				
+				if(wd.findElement(By.xpath("//tr[@class='gridHeader']")).isDisplayed()==false )
+				{
+					cell.setCellValue("Time Problem");
+					FileOutputStream outputStream = new FileOutputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
+					wb.write(outputStream);
+					Thread.sleep(1000);
+					continue;
+				}
 				
 				//wd.findElement(By.xpath("//input[@id='ctl00_cphBody_txtPrintTruckDriver']")).clear();
 				
@@ -138,7 +147,9 @@ public class Insert_from_Excel extends Utility
 				wd.findElement(By.id("ctl00_cphBody_txtPrintProductionQty")).clear();
 				if (selUtil.isInvisible(By.xpath("//img[@id='ctl00_cphBody_imgLoader']"), wd, 20) == true);
 				Thread.sleep(2500);
-				wd.findElement(By.xpath("//button[contains(text(),'OK')]")).click();
+				WebElement btn_ok_Create_Row= wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button"));
+				btn_ok_Create_Row.click();
+				
 				Thread.sleep(1500);
 				waitForLoaderToDisappear(wd);
 				
@@ -149,13 +160,29 @@ public class Insert_from_Excel extends Utility
 				a.click().sendKeys(Keys.ENTER).perform(); 
 				waitForLoaderToDisappear(wd);
 				Thread.sleep(1500);
+				WebElement Lbl_ok_Create_Row= wd.findElement(By.xpath("/html/body/div[6]/p "));
+				Thread.sleep(1000);
+				if(Lbl_ok_Create_Row.getText().contains("same time already exist"))
+				{
+					cell.setCellValue("Time Problem");
+					FileOutputStream outputStream = new FileOutputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
+					wb.write(outputStream);
+					wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
+					Thread.sleep(1000);
+					wd.findElement(By.id("ctl00_cphBody_btn_clear")).click();
+					Thread.sleep(2000);
+					continue;
+				}
+				
+				
+				
 				//if (selUtil.isDisaplyed(By.xpath("//button[contains(text(),'OK')]")
 				//div[@class='sa-confirm-button-container']
-				if (selUtil.isDisaplyed(By.xpath("//div[@class='sa-confirm-button-container']"), wd, 25) == true);
+				//if (selUtil.isDisaplyed(By.xpath("//div[@class='sa-confirm-button-container']"), wd, 25) == true);
 				
 				//if (selUtil.isDisaplyed(By.xpath("//div[@class='sweet-alert showSweetAlert visible']//button[contains(text(),'OK')]"), wd, 15000) == true);
 				Thread.sleep(2000);
-				wd.findElement(By.xpath("//button[contains(text(),'OK')]")).click();
+				wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
 				Thread.sleep(1500);
 				
 				//Enter Grade
@@ -166,36 +193,44 @@ public class Insert_from_Excel extends Utility
 				Thread.sleep(1500);
 				
 				// if (selUtil.isDisaplyed(By.xpath("//button[contains(text(),'OK')]"), wd,
-				if (selUtil.isDisaplyed(By.xpath("//div[@class='sweet-alert showSweetAlert visible']//button[contains(text(),'OK')]"), wd, 10000) == true);
-				wd.findElement(By.xpath("//button[contains(text(),'OK')]")).click();
+				if (selUtil.isDisaplyed(By.xpath("/html/body/div[6]/div[7]/div/button"), wd, 10) == true);
+				wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
 				waitForLoaderToDisappear(wd);
 				Thread.sleep(1500);
 				//Click Submit Button
 				wd.findElement(By.id("ctl00_cphBody_btn_submit")).click();
 				Thread.sleep(2500);
 				waitForLoaderToDisappear(wd);
+				
+				
 				//if (selUtil.isDisaplyed(By.xpath("//p[contains(text(),'Batch created successfully.')]"), wd, 15) == true);
-				if (selUtil.isDisaplyed(By.xpath("//p[contains(text(),'Batch Updated successfully.')]"), wd, 15) == true);
+				if (selUtil.isDisaplyed(By.xpath("/html/body/div[6]/div[7]/div/button"), wd, 15) == true);
 				
 
-				cell = sheet.getRow(i).createCell(6);
+				
 
 				//WebElement print_msg = wd.findElement(By.xpath("//p[contains(text(),'Batch created successfully.')]"));
-				WebElement print_msg = wd.findElement(By.xpath("//p[contains(text(),'Batch Updated successfully.')]"));
+				WebElement print_msg = wd.findElement(By.xpath("/html/body/div[6]/p"));
 				String text = print_msg.getText();
-
-				if (print_msg.isDisplayed()) 
+				
+				
+				if (text.contains("successfully")) 
 				{
 					cell.setCellValue("PASS");
 				} 
+				
+				else
+				{
+					cell.setCellValue("Fail");
+				}
 				 
 				FileOutputStream outputStream = new FileOutputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
 				wb.write(outputStream);
 				
 				System.out.println(i +":-" + sheet.getRow(i).getCell(0).getRawValue() + ":" + text);
 				Thread.sleep(3000);
-				wd.findElement(By.xpath("//button[contains(text(),'OK')]")).click();
-
+				wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
+				Thread.sleep(1000);
 				wd.findElement(By.id("ctl00_cphBody_btn_clear")).click();
 				Thread.sleep(2000);
 				//Thread.sleep(60000);
@@ -203,6 +238,8 @@ public class Insert_from_Excel extends Utility
 			catch (Exception e) 
 			{
 				
+				wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
+				/*
 				cell = sheet.getRow(i).createCell(6);
 				cell.setCellValue("FAIL");
 				FileOutputStream outputStream = new FileOutputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227_02.xlsx");
@@ -229,7 +266,7 @@ public class Insert_from_Excel extends Utility
 							wd.findElement(By.xpath("//button[contains(text(),'OK')]")).click();
 							Thread.sleep(1000);
 						}
-					}*/
+					}
 
 				}
 				catch (Exception e1)
@@ -237,7 +274,7 @@ public class Insert_from_Excel extends Utility
 					cell.setCellValue("Batch Not Found");
 					System.out.println(i +":-" + sheet.getRow(i).getCell(0).getRawValue() + ":Batch Not found");
 				}
-				
+				*/
 				WebElement Batch= wd.findElement(By.xpath("//i[@class='md md-details']"));
 				a.moveToElement(Batch).release().build().perform();
 				wd.findElement(By.linkText("Batch List")).click();
@@ -253,5 +290,6 @@ public class Insert_from_Excel extends Utility
         wb.close();
         fis.close();
 	}
+
 
 }
