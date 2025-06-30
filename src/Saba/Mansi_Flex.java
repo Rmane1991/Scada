@@ -27,13 +27,12 @@ public class Mansi_Flex extends Utility {
 	{
 		
 
-		FileInputStream fis = new FileInputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227.xlsx");
+		FileInputStream fis = new FileInputStream("D:\\New_Host\\Feb_March__Data_Manci_1565_To_3227.xlsx");
 
 		
+		// Read Excel sheet
 		XSSFWorkbook wb = new XSSFWorkbook(fis);
-        // Read Excel sheet
-		//XSSFSheet sheet = wb.getSheet("Flex");
-		XSSFSheet sheet = wb.getSheet("Sheet1");
+        XSSFSheet sheet = wb.getSheet("Sheet1");
 		int rowCount = sheet.getPhysicalNumberOfRows()-1;// sheet.getLastRowNum() - sheet.getFirstRowNum();
 
 		// Web Driver setup
@@ -56,16 +55,13 @@ public class Mansi_Flex extends Utility {
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "land23", "land@23", "5471936802");
 		Thread.sleep(2000);
 		
-		
-		
-		
 		// Mouse action
 		Actions a = new Actions(wd);
 
 		// For read and write data from excel
 		System.out.println("No of Record Found Into Excel :- " + rowCount);
 
-		for (int i = 1447; i <= rowCount; i++) //for (int i = rowCount; i >= 1; i--)
+		for (int i = 1462; i <= rowCount; i++)
 			{
 			try 
 			{
@@ -73,34 +69,34 @@ public class Mansi_Flex extends Utility {
 				
 				//Enter Batch No From
  				WebElement BatchFrom = wd.findElement(By.id("ctl00_cphBody_txtBatchFrom"));
+ 				BatchFrom.clear();
 				BatchFrom.sendKeys(sheet.getRow(i).getCell(0).getRawValue());
 				
 				//Enter Batch No To
 				WebElement BatchTo = wd.findElement(By.id("ctl00_cphBody_txtBatchTo"));
-				//String aString=sheet.getRow(i).getCell(1).getRawValue();
+				BatchTo.clear();
 				BatchTo.sendKeys(sheet.getRow(i).getCell(1).getRawValue());
 				wd.findElement(By.id("ctl00_cphBody_btnSearch")).click();
-				
+				Thread.sleep(1000);
 				waitForLoaderToDisappear(wd);
+				Thread.sleep(1000);
+				
+				// Check Batch No is Displayed or Not
+				if(selUtil.isDisaplyed(By.xpath("//tr[@class='gridHeader']"),wd,5)==false)
+				{
+					cell.setCellValue("Batch Not found");
+					FileOutputStream outputStream = new FileOutputStream("D:\\New_Host\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
+					wb.write(outputStream);
+					Thread.sleep(1000);
+					System.out.println(i +":-" + sheet.getRow(i).getCell(0).getRawValue() + ": Batch Not found");
+					continue;
+				}
 				
 				//Click On Batch No
 				Thread.sleep(3000);
 				wd.findElement(By.id("ctl00_cphBody_gvBatchList_ctl02_lnkBatchNo")).click();
 				if (selUtil.isDisaplyed(By.id("ctl00_cphBody_drpCustomer"), wd, 15) == true);
 				waitForLoaderToDisappear(wd);	
-				
-				
-				if(selUtil.isDisaplyed(By.xpath("//tr[@class='gridHeader']"),wd,5)==false)
-				//if(wd.findElement(By.xpath("//tr[@class='gridHeader']")).isDisplayed()==false )
-				{
-					cell.setCellValue("Batch Not found");
-					FileOutputStream outputStream = new FileOutputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
-					wb.write(outputStream);
-					Thread.sleep(1000);
-					continue;
-				}
-				
-				//wd.findElement(By.xpath("//input[@id='ctl00_cphBody_txtPrintTruckDriver']")).clear();
 				
 				
 				/*
@@ -116,22 +112,22 @@ public class Mansi_Flex extends Utility {
 				selUtil.Dropdown(myEle_Site, sheet.getRow(i).getCell(3).getStringCellValue());
 				Thread.sleep(3000);
 				
-				/*
+				
 				//Enter Vehicle number 
 				WebElement myEle_Vehicle = wd.findElement(By.xpath("//select[@id='ctl00_cphBody_ddlTruckNo']"));
 				selUtil.Dropdown(myEle_Vehicle, sheet.getRow(i).getCell(6).getStringCellValue());
 				Thread.sleep(3000);
 				
-				*/
-				/*
+				
+				
 				//Enter Driver Name
 				wd.findElement(By.xpath("//input[@id='ctl00_cphBody_txtPrintTruckDriver']")).clear();
 				//if (selUtil.isInvisible(By.xpath("//img[@id='ctl00_cphBody_imgLoader']"), wd, 10) == true);
 				Thread.sleep(2000);
 				
-				if(selUtil.isDisaplyed(By.xpath("//button[contains(text(),'OK')]"), wd, 5) ==true)
+				if(selUtil.isDisaplyed(By.xpath("/html/body/div[6]/div[7]/div/button"), wd, 5) ==true)
 				{
-					wd.findElement(By.xpath("//button[contains(text(),'OK')]")).click();
+					wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
 				}
 				
 				WebElement txtdriver= wd.findElement(By.xpath("//input[@id='ctl00_cphBody_txtPrintTruckDriver']"));
@@ -140,10 +136,6 @@ public class Mansi_Flex extends Utility {
 				Thread.sleep(2000);
 				waitForLoaderToDisappear(wd);
 				*/
-				//WebElement Str=wd.findElement(By.xpath("//span[@id='ctl00_cphBody_lblPrintBatcherName']"));
-				//Str.click();
-				
-				
 				
 				//Enter Production Qty
 				wd.findElement(By.id("ctl00_cphBody_txtPrintProductionQty")).clear();
@@ -167,7 +159,7 @@ public class Mansi_Flex extends Utility {
 				if(Lbl_ok_Create_Row.getText().contains("same time already exist"))
 				{
 					cell.setCellValue("Time Problem");
-					FileOutputStream outputStream = new FileOutputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
+					FileOutputStream outputStream = new FileOutputStream("D:\\New_Host\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
 					wb.write(outputStream);
 					wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
 					Thread.sleep(1000);
@@ -176,13 +168,6 @@ public class Mansi_Flex extends Utility {
 					continue;
 				}
 				
-				
-				
-				//if (selUtil.isDisaplyed(By.xpath("//button[contains(text(),'OK')]")
-				//div[@class='sa-confirm-button-container']
-				//if (selUtil.isDisaplyed(By.xpath("//div[@class='sa-confirm-button-container']"), wd, 25) == true);
-				
-				//if (selUtil.isDisaplyed(By.xpath("//div[@class='sweet-alert showSweetAlert visible']//button[contains(text(),'OK')]"), wd, 15000) == true);
 				Thread.sleep(2000);
 				wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
 				Thread.sleep(1500);
@@ -194,7 +179,6 @@ public class Mansi_Flex extends Utility {
 				waitForLoaderToDisappear(wd);
 				Thread.sleep(1500);
 				
-				// if (selUtil.isDisaplyed(By.xpath("//button[contains(text(),'OK')]"), wd,
 				if (selUtil.isDisaplyed(By.xpath("/html/body/div[6]/div[7]/div/button"), wd, 10) == true);
 				wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
 				waitForLoaderToDisappear(wd);
@@ -205,13 +189,8 @@ public class Mansi_Flex extends Utility {
 				waitForLoaderToDisappear(wd);
 				
 				
-				//if (selUtil.isDisaplyed(By.xpath("//p[contains(text(),'Batch created successfully.')]"), wd, 15) == true);
 				if (selUtil.isDisaplyed(By.xpath("/html/body/div[6]/div[7]/div/button"), wd, 15) == true);
 				
-
-				
-
-				//WebElement print_msg = wd.findElement(By.xpath("//p[contains(text(),'Batch created successfully.')]"));
 				WebElement print_msg = wd.findElement(By.xpath("/html/body/div[6]/p"));
 				String text = print_msg.getText();
 				
@@ -226,7 +205,7 @@ public class Mansi_Flex extends Utility {
 					cell.setCellValue("Fail");
 				}
 				 
-				FileOutputStream outputStream = new FileOutputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
+				FileOutputStream outputStream = new FileOutputStream("D:\\New_Host\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
 				wb.write(outputStream);
 				
 				System.out.println(i +":-" + sheet.getRow(i).getCell(0).getRawValue() + ":" + text);
@@ -235,52 +214,25 @@ public class Mansi_Flex extends Utility {
 				Thread.sleep(1000);
 				wd.findElement(By.id("ctl00_cphBody_btn_clear")).click();
 				Thread.sleep(2000);
-				//Thread.sleep(60000);
 			} 
 			catch (Exception e) 
 			{
-				
-				wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
-				/*
-				cell = sheet.getRow(i).createCell(6);
-				cell.setCellValue("FAIL");
-				FileOutputStream outputStream = new FileOutputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227_02.xlsx");
-				wb.write(outputStream);
-				
-				Thread.sleep(3000);
-				
 				try 
-				{	
-					//try {
-
-						if (wd.findElement(By.xpath("//p[contains(text(),'Batch Not updated')]")).isDisplayed() == true) 
-						{
-							Thread.sleep(1000);
-							wd.findElement(By.xpath("//button[contains(text(),'OK')]")).click();
-							Thread.sleep(1000);
-						}
-						//} 
-				/*	catch (Exception e1) 
-					{
-						if (wd.findElement(By.xpath("//p[contains(text(),'Batch Updated successfully.')]")).isDisplayed() == true) {
-							Thread.sleep(1000);
-							cell.setCellValue("Batch Updated");
-							wd.findElement(By.xpath("//button[contains(text(),'OK')]")).click();
-							Thread.sleep(1000);
-						}
-					}
-
-				}
-				catch (Exception e1)
 				{
-					cell.setCellValue("Batch Not Found");
-					System.out.println(i +":-" + sheet.getRow(i).getCell(0).getRawValue() + ":Batch Not found");
+					wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
+					WebElement Batch= wd.findElement(By.xpath("//i[@class='md md-details']"));
+					a.moveToElement(Batch).release().build().perform();
+					wd.findElement(By.linkText("Batch List")).click();
+					continue;
 				}
-				*/
-				WebElement Batch= wd.findElement(By.xpath("//i[@class='md md-details']"));
-				a.moveToElement(Batch).release().build().perform();
-				wd.findElement(By.linkText("Batch List")).click();
-				continue;
+				catch (Exception e1) 
+				{
+					WebElement Batch= wd.findElement(By.xpath("//i[@class='md md-details']"));
+					a.moveToElement(Batch).release().build().perform();
+					wd.findElement(By.linkText("Batch List")).click();
+					continue;
+				}
+				
 			}
 			
 			
