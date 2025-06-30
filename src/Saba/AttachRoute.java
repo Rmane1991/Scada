@@ -15,7 +15,7 @@ import org.openqa.selenium.interactions.Actions;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import method.Utility;
 
-public class AttachRoute {
+public class AttachRoute extends Utility {
 
 	public static void main(String[] args) throws InterruptedException, IOException {
 		FileInputStream fis = new FileInputStream("E:\\Eclipse_Excel\\Update_Route_Vijay.xlsx");
@@ -44,7 +44,7 @@ public class AttachRoute {
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "meflex", "meflex", "1936587042");
 
 		//For RB
-		selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "rbcrmc", "rbc#24", "213241237");
+		login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "rbcrmc", "rbc#24", "213241237");
 		
 		// Mouse action
 		Actions a = new Actions(wd);

@@ -47,11 +47,11 @@ public class Insert_from_Excel extends Utility
 		((ChromeDriver) wd).executeScript("document.body.style.zoom='75%'");
 		
 		// Create Object
-		Utility selUtil = new Utility();
+		//Utility selUtil = new Utility();
 		XSSFCell cell = null;
 		
 		// Login
-		selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "mansiom", "mansiom#25", "3105251205");
+		login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "mansiom", "mansiom#25", "3105251205");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "meflex", "meflex", "0375921468");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "rbcrmc", "rbc#24", "213241237");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "land23", "land@23", "5471936802");
@@ -85,7 +85,7 @@ public class Insert_from_Excel extends Utility
 				//Click On Batch No
 				Thread.sleep(3000);
 				wd.findElement(By.id("ctl00_cphBody_gvBatchList_ctl02_lnkBatchNo")).click();
-				if (selUtil.isDisaplyed(By.id("ctl00_cphBody_drpCustomer"), wd, 15) == true);
+				if (isDisaplyed(By.id("ctl00_cphBody_drpCustomer"), wd, 15) == true);
 				waitForLoaderToDisappear(wd);	
 				
 				
@@ -136,7 +136,7 @@ public class Insert_from_Excel extends Utility
 				
 				//Enter Production Qty
 				wd.findElement(By.id("ctl00_cphBody_txtPrintProductionQty")).clear();
-				if (selUtil.isInvisible(By.xpath("//img[@id='ctl00_cphBody_imgLoader']"), wd, 20) == true);
+				if (isInvisible(By.xpath("//img[@id='ctl00_cphBody_imgLoader']"), wd, 20) == true);
 				Thread.sleep(2500);
 				wd.findElement(By.xpath("//button[contains(text(),'OK')]")).click();
 				Thread.sleep(1500);
@@ -151,7 +151,7 @@ public class Insert_from_Excel extends Utility
 				Thread.sleep(1500);
 				//if (selUtil.isDisaplyed(By.xpath("//button[contains(text(),'OK')]")
 				//div[@class='sa-confirm-button-container']
-				if (selUtil.isDisaplyed(By.xpath("//div[@class='sa-confirm-button-container']"), wd, 25) == true);
+				if (isDisaplyed(By.xpath("//div[@class='sa-confirm-button-container']"), wd, 25) == true);
 				
 				//if (selUtil.isDisaplyed(By.xpath("//div[@class='sweet-alert showSweetAlert visible']//button[contains(text(),'OK')]"), wd, 15000) == true);
 				Thread.sleep(2000);
@@ -166,7 +166,7 @@ public class Insert_from_Excel extends Utility
 				Thread.sleep(1500);
 				
 				// if (selUtil.isDisaplyed(By.xpath("//button[contains(text(),'OK')]"), wd,
-				if (selUtil.isDisaplyed(By.xpath("//div[@class='sweet-alert showSweetAlert visible']//button[contains(text(),'OK')]"), wd, 10000) == true);
+				if (isDisaplyed(By.xpath("//div[@class='sweet-alert showSweetAlert visible']//button[contains(text(),'OK')]"), wd, 10000) == true);
 				wd.findElement(By.xpath("//button[contains(text(),'OK')]")).click();
 				waitForLoaderToDisappear(wd);
 				Thread.sleep(1500);
@@ -175,7 +175,7 @@ public class Insert_from_Excel extends Utility
 				Thread.sleep(2500);
 				waitForLoaderToDisappear(wd);
 				//if (selUtil.isDisaplyed(By.xpath("//p[contains(text(),'Batch created successfully.')]"), wd, 15) == true);
-				if (selUtil.isDisaplyed(By.xpath("//p[contains(text(),'Batch Updated successfully.')]"), wd, 15) == true);
+				if (isDisaplyed(By.xpath("//p[contains(text(),'Batch Updated successfully.')]"), wd, 15) == true);
 				
 
 				cell = sheet.getRow(i).createCell(6);

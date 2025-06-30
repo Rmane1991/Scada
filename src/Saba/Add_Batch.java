@@ -18,7 +18,7 @@ import org.openqa.selenium.support.ui.Select;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import method.Utility;
 
-public class Add_Batch {
+public class Add_Batch  extends Utility {
 
 	public static void main(String[] args) throws IOException, InterruptedException 
 	{
@@ -44,7 +44,7 @@ public class Add_Batch {
 		XSSFCell cell = null;
 
 		// Login
-		selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "mansiom", "mansiom#25", "3105251205");
+		login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "mansiom", "mansiom#25", "3105251205");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "rbcrmc", "rbc#24", "213241237");
 		// selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx",
 		// "land23", "land@23", "20230401");

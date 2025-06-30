@@ -15,7 +15,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import method.Utility;
 
-public class Print_Challan 
+public class Print_Challan extends Utility
 {
 
 	public static void main(String[] args) throws IOException, InterruptedException, AWTException 
@@ -43,9 +43,9 @@ public class Print_Challan
 
 		// Create Object
 		
-		Utility selUtil = new Utility();
+		//Utility selUtil = new Utility();
 		XSSFCell cell = null;
-		selUtil.login_BMC(wd, "http://www.bmc-scada.online/app/default.aspx", "ME", "MRMA!@489");
+		login_BMC(wd, "http://www.bmc-scada.online/app/default.aspx", "ME", "MRMA!@489");
 
 		Thread.sleep(2000);
 		

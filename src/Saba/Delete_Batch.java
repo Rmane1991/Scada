@@ -55,11 +55,11 @@ public class Delete_Batch extends Utility {
 		wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
 		// Create Object
-		Utility selUtil = new Utility();
+		//Utility selUtil = new Utility();
 		XSSFCell cell = null;
 
 		// Login
-		selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "mansiom", "mansiom#25", "3105251205");
+		login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "mansiom", "mansiom#25", "3105251205");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "rbcrmc", "rbc#24", "213241237");
 		// selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx",
 		// "land23", "land@23", "20230401");

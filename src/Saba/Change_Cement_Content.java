@@ -17,7 +17,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import method.Utility;
 
-public class Change_Cement_Content {
+public class Change_Cement_Content extends Utility {
 
 	public static void main(String[] args) throws IOException, InterruptedException, AWTException {
 		
@@ -39,11 +39,11 @@ public class Change_Cement_Content {
 
 		// Create Object
 
-		Utility selUtil = new Utility();
+		//Utility selUtil = new Utility();
 		XSSFCell cell = null;
 		
 		//Login Into BMC Scada Website
-		selUtil.login_BMC(wd, "http://www.bmc-scada.online/app/default.aspx", "ME", "MRMA!@489");
+		login_BMC(wd, "http://www.bmc-scada.online/app/default.aspx", "ME", "MRMA!@489");
 		Thread.sleep(2000);
 
 		// Clickbatch

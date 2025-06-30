@@ -3,7 +3,6 @@ package Saba;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.Duration;
 
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -13,23 +12,21 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import method.Utility;
 
-public class Mansi_Flex extends Utility {
-
-
+public class Mansi_Flex extends Utility 
+{
 
 	public static void main(String[] args) throws IOException, InterruptedException 
 	{
 		
+		FileInputStream fis = new FileInputStream("D:\\New_Host\\Pending.xlsx");
 
-		FileInputStream fis = new FileInputStream("D:\\New_Host\\Feb_March__Data_Manci_1565_To_3227.xlsx");
-
-		
 		// Read Excel sheet
 		XSSFWorkbook wb = new XSSFWorkbook(fis);
         XSSFSheet sheet = wb.getSheet("Sheet1");
@@ -40,16 +37,25 @@ public class Mansi_Flex extends Utility {
 		
 		//ChromeOptions options = new ChromeOptions();
 		//options.addArguments("--remote-allow-origins=*");
-		WebDriver wd = new ChromeDriver();
-		wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-		((ChromeDriver) wd).executeScript("document.body.style.zoom='75%'");
+		/*
+		 * WebDriver wd = new ChromeDriver();
+		 * wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		 * ((ChromeDriver) wd).executeScript("document.body.style.zoom='75%'");
+		 */
+		
+		//Zoom Out to 75%
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--force-device-scale-factor=0.75");
+		WebDriver wd = new ChromeDriver(options);
+
+		
 		
 		// Create Object
-		Utility selUtil = new Utility();
+		//Utility selUtil = new Utility();
 		XSSFCell cell = null;
 		
 		// Login
-		selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "mansiom", "mansiom#25", "3105251205");
+		login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "mansiom", "mansiom#25", "3105251205");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "meflex", "meflex", "0375921468");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "rbcrmc", "rbc#24", "213241237");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "land23", "land@23", "5471936802");
@@ -61,7 +67,7 @@ public class Mansi_Flex extends Utility {
 		// For read and write data from excel
 		System.out.println("No of Record Found Into Excel :- " + rowCount);
 
-		for (int i = 1462; i <= rowCount; i++)
+		for (int i = 12; i <= rowCount; i++)
 			{
 			try 
 			{
@@ -82,10 +88,10 @@ public class Mansi_Flex extends Utility {
 				Thread.sleep(1000);
 				
 				// Check Batch No is Displayed or Not
-				if(selUtil.isDisaplyed(By.xpath("//tr[@class='gridHeader']"),wd,5)==false)
+				if(isDisaplyed(By.xpath("//tr[@class='gridHeader']"),wd,5)==false)
 				{
 					cell.setCellValue("Batch Not found");
-					FileOutputStream outputStream = new FileOutputStream("D:\\New_Host\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
+					FileOutputStream outputStream = new FileOutputStream("D:\\New_Host\\Pending_01.xlsx");
 					wb.write(outputStream);
 					Thread.sleep(1000);
 					System.out.println(i +":-" + sheet.getRow(i).getCell(0).getRawValue() + ": Batch Not found");
@@ -95,7 +101,7 @@ public class Mansi_Flex extends Utility {
 				//Click On Batch No
 				Thread.sleep(3000);
 				wd.findElement(By.id("ctl00_cphBody_gvBatchList_ctl02_lnkBatchNo")).click();
-				if (selUtil.isDisaplyed(By.id("ctl00_cphBody_drpCustomer"), wd, 15) == true);
+				if (isDisaplyed(By.id("ctl00_cphBody_drpCustomer"), wd, 15) == true);
 				waitForLoaderToDisappear(wd);	
 				
 				
@@ -139,7 +145,7 @@ public class Mansi_Flex extends Utility {
 				
 				//Enter Production Qty
 				wd.findElement(By.id("ctl00_cphBody_txtPrintProductionQty")).clear();
-				if (selUtil.isInvisible(By.xpath("//img[@id='ctl00_cphBody_imgLoader']"), wd, 20) == true);
+				if (isInvisible(By.xpath("//img[@id='ctl00_cphBody_imgLoader']"), wd, 20) == true);
 				Thread.sleep(2500);
 				WebElement btn_ok_Create_Row= wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button"));
 				btn_ok_Create_Row.click();
@@ -159,7 +165,7 @@ public class Mansi_Flex extends Utility {
 				if(Lbl_ok_Create_Row.getText().contains("same time already exist"))
 				{
 					cell.setCellValue("Time Problem");
-					FileOutputStream outputStream = new FileOutputStream("D:\\New_Host\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
+					FileOutputStream outputStream = new FileOutputStream("D:\\New_Host\\Pending_01.xlsx");
 					wb.write(outputStream);
 					wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
 					Thread.sleep(1000);
@@ -179,7 +185,7 @@ public class Mansi_Flex extends Utility {
 				waitForLoaderToDisappear(wd);
 				Thread.sleep(1500);
 				
-				if (selUtil.isDisaplyed(By.xpath("/html/body/div[6]/div[7]/div/button"), wd, 10) == true);
+				if (isDisaplyed(By.xpath("/html/body/div[6]/div[7]/div/button"), wd, 10) == true);
 				wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
 				waitForLoaderToDisappear(wd);
 				Thread.sleep(1500);
@@ -188,8 +194,7 @@ public class Mansi_Flex extends Utility {
 				Thread.sleep(2500);
 				waitForLoaderToDisappear(wd);
 				
-				
-				if (selUtil.isDisaplyed(By.xpath("/html/body/div[6]/div[7]/div/button"), wd, 15) == true);
+				if (isDisaplyed(By.xpath("/html/body/div[6]/div[7]/div/button"), wd, 15) == true);
 				
 				WebElement print_msg = wd.findElement(By.xpath("/html/body/div[6]/p"));
 				String text = print_msg.getText();
@@ -205,7 +210,7 @@ public class Mansi_Flex extends Utility {
 					cell.setCellValue("Fail");
 				}
 				 
-				FileOutputStream outputStream = new FileOutputStream("D:\\New_Host\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
+				FileOutputStream outputStream = new FileOutputStream("D:\\New_Host\\Pending_01.xlsx");
 				wb.write(outputStream);
 				
 				System.out.println(i +":-" + sheet.getRow(i).getCell(0).getRawValue() + ":" + text);
@@ -234,9 +239,6 @@ public class Mansi_Flex extends Utility {
 				}
 				
 			}
-			
-			
-
 		}
 		
        System.out.println("Thanks It's Done");

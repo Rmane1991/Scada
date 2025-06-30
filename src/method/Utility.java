@@ -56,7 +56,7 @@ public static void waitForLoaderToDisappear(WebDriver driver)
 }
 
 	
-	public boolean isDisaplyed(By Locator, WebDriver wd, long tm)
+	public static boolean isDisaplyed(By Locator, WebDriver wd, long tm)
 	{
 		boolean isDisplayed = false;
 
@@ -80,7 +80,7 @@ public static void waitForLoaderToDisappear(WebDriver driver)
 	
 	
 	
-	 public void acceptAlertIfPresent() {
+	 public static void acceptAlertIfPresent() {
 	        try {
 	            Alert alert = wd.switchTo().alert();
 	            System.out.println("Alert found: " + alert.getText());
@@ -102,7 +102,7 @@ public static void waitForLoaderToDisappear(WebDriver driver)
 	        }
 	 }
 	
-	public boolean isInvisible(By Locator, WebDriver wd, long tm)
+	public static boolean isInvisible(By Locator, WebDriver wd, long tm)
 	{
 		boolean isDisplayed = false;
 
@@ -145,7 +145,7 @@ public static void waitForLoaderToDisappear(WebDriver driver)
 
 	}
 
-	public void login_Flex(WebDriver wd, String url, String User, String Pass, String refcode) 
+	public static void login_Flex(WebDriver wd, String url, String User, String Pass, String refcode) 
 	{
 		wd.manage().window().maximize();
 		wd.get(url);
@@ -164,7 +164,7 @@ public static void waitForLoaderToDisappear(WebDriver driver)
 		System.out.println(cat + " " + text);
 	}
 
-	public void login_BMC(WebDriver wd, String url, String User, String Pass) 
+	public static void login_BMC(WebDriver wd, String url, String User, String Pass) 
 	{
 		wd.manage().window().maximize();
 		wd.get(url);
