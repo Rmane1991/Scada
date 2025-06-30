@@ -89,9 +89,11 @@ public class Mansi_Flex extends Utility {
 				if (selUtil.isDisaplyed(By.id("ctl00_cphBody_drpCustomer"), wd, 15) == true);
 				waitForLoaderToDisappear(wd);	
 				
-				if(wd.findElement(By.xpath("//tr[@class='gridHeader']")).isDisplayed()==false )
+				
+				if(selUtil.isDisaplyed(By.xpath("//tr[@class='gridHeader']"),wd,5)==false)
+				//if(wd.findElement(By.xpath("//tr[@class='gridHeader']")).isDisplayed()==false )
 				{
-					cell.setCellValue("Time Problem");
+					cell.setCellValue("Batch Not found");
 					FileOutputStream outputStream = new FileOutputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
 					wb.write(outputStream);
 					Thread.sleep(1000);
