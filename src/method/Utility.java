@@ -164,13 +164,17 @@ public static void waitForLoaderToDisappear(WebDriver driver)
 		System.out.println(cat + " " + text);
 	}
 
-	public static void login_BMC(WebDriver wd, String url, String User, String Pass) 
+	public static void login_BMC(WebDriver wd, String url, String User, String Pass) throws InterruptedException 
 	{
 		wd.manage().window().maximize();
 		wd.get(url);
 		wd.findElement(By.id("txtLoginId")).sendKeys(User);
 		wd.findElement(By.id("txtPassword")).sendKeys(Pass);
 		wd.findElement(By.id("btnSubmit")).click();
+		Thread.sleep(2000);
+		wd.findElement(By.xpath("//a[@id='dtlstModules_ctl00_lblModuleName']")).click();
+		Thread.sleep(2000);
+		
 		System.out.println("Login Done");
 
 	}

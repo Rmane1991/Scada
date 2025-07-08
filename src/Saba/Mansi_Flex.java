@@ -230,7 +230,7 @@ public class Mansi_Flex extends Utility
 					wd.findElement(By.linkText("Batch List")).click();
 					continue;
 				}
-				catch (Exception e1) 
+				catch (Exception e1)
 				{
 					WebElement Batch= wd.findElement(By.xpath("//i[@class='md md-details']"));
 					a.moveToElement(Batch).release().build().perform();

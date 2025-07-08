@@ -1,12 +1,15 @@
 package Saba;
 
 import java.awt.AWTException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -14,7 +17,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-//import org.openqa.selenium.interactions.Actions;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import method.Utility;
@@ -22,137 +24,138 @@ import method.Utility;
 public class SavePDF extends Utility {
 
     public static void main(String[] args) throws IOException, InterruptedException, AWTException {
-        FileInputStream fis = new FileInputStream("E:\\Manaci_Vijay\\Flex_1004_To_1564.xlsx");
-
+        FileInputStream fis = new FileInputStream("D:\\ME_Data\\Excel\\Book.xlsx");
         @SuppressWarnings("resource")
         XSSFWorkbook wb = new XSSFWorkbook(fis);
-        XSSFSheet sheet = wb.getSheet("Sheet2");
+        XSSFSheet sheet = wb.getSheet("Sheet1");
         int rowCount = sheet.getPhysicalNumberOfRows() - 1;
 
-        // Setup WebDriver
         WebDriverManager.chromedriver().setup();
-
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         options.addArguments("--kiosk-printing");
 
-        // Set Chrome preferences for silent printing and file saving
-        Map<String, Object> prefs = new HashMap<String, Object>();
+        Map<String, Object> prefs = new HashMap<>();
         prefs.put("printing.print_preview_sticky_settings.appState",
-            "{\"recentDestinations\": [{\"id\": \"Save as PDF\", \"origin\": \"local\", \"account\": \"\"}],"
-            + "\"selectedDestinationId\": \"Save as PDF\","
-            + "\"version\": 2}");
-        prefs.put("savefile.default_directory", "E:\\Eclipse_Excel\\C273_Second"); // Set download location
+                "{\"recentDestinations\": [{\"id\": \"Save as PDF\", \"origin\": \"local\", \"account\": \"\"}],"
+                        + "\"selectedDestinationId\": \"Save as PDF\","
+                        + "\"version\": 2}");
+        prefs.put("savefile.default_directory", "D:\\ME_Data\\Excel\\PDF");
         prefs.put("download.prompt_for_download", false);
-        prefs.put("download.default_directory", "E:\\Eclipse_Excel\\C273_Second");
+        prefs.put("download.default_directory", "D:\\ME_Data\\Excel\\PDF");
         options.setExperimentalOption("prefs", prefs);
 
         ChromeDriver wd = new ChromeDriver(options);
         wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-       // Utility selUtil = new Utility();
-        XSSFCell cell = null;
         login_BMC(wd, "http://www.bmc-scada.online/app/default.aspx", "ME", "MRMA!@489");
-        
-    	
-		//Actions a = new Actions(wd);
-		Thread.sleep(2000);
 
-		// Clickbatch
-		wd.findElement(By.xpath("(//i[@class='fa fa-caret-down'])[3]")).click();
-		Thread.sleep(1000);
+        Thread.sleep(2000);
+        wd.findElement(By.xpath("(//i[@class='fa fa-caret-down'])[3]")).click();
+        Thread.sleep(1000);
+        wd.findElement(By.xpath("//a[normalize-space()='Batch List']")).click();
+        Thread.sleep(1000);
 
-		wd.findElement(By.xpath("//a[normalize-space()='Batch List']")).click();
-		Thread.sleep(1000);
+        System.out.println("No of Record Found Into Excel :- " + rowCount);
+        XSSFCell cell = null;
 
-		// For read and write data from excel
-
-		System.out.println("No of Record Found Into Excel :- " + rowCount);
-
-
-        for (int i =1; i <=rowCount; i++) {
+        for (int i = 1; i <= rowCount; i++) {
             try {
-                // Enter Batch No From
+                String batchNo = sheet.getRow(i).getCell(0).getRawValue(); // unique number
+
+                String thaneName = "";
+                if (sheet.getRow(i).getCell(1).getRawValue() != null) {
+                    CellType type = sheet.getRow(i).getCell(1).getCellType();
+                    if (type == CellType.STRING) {
+                        thaneName = sheet.getRow(i).getCell(1).getStringCellValue();
+                    } else if (type == CellType.NUMERIC) {
+                        thaneName = String.valueOf((int) sheet.getRow(i).getCell(1).getNumericCellValue());
+                    }
+                } else {
+                    thaneName = "Blank";
+                }
+                thaneName = thaneName.replaceAll("[\\\\/:*?\"<>|]", "_");
+
                 WebElement BatchFrom = wd.findElement(By.xpath("//input[@id='ctl00_ctpContent_txtBatchFrom']"));
                 BatchFrom.clear();
-                BatchFrom.sendKeys(sheet.getRow(i).getCell(0).getRawValue());
+                BatchFrom.sendKeys(batchNo);
 
-                // Enter Batch No To
                 WebElement BatchTo = wd.findElement(By.xpath("//input[@id='ctl00_ctpContent_txtBatchTo']"));
                 BatchTo.clear();
-                BatchTo.sendKeys(sheet.getRow(i).getCell(0).getRawValue());
+                BatchTo.sendKeys(batchNo);
 
-                // Click Search
                 wd.findElement(By.xpath("//input[@id='ctl00_ctpContent_btnSearch']")).click();
                 Thread.sleep(4000);
 
-                /*
                 wd.findElement(By.xpath("//input[@id='ctl00_ctpContent_gvBatchList_ctl02_imgPrint']")).click();
-				if (selUtil.isDisaplyed(By.xpath("//input[@id='ctl00_ctpContent_Button1']"), wd, 5000) == true);
 
-				// Click Print Button to print Batch Report
-				
-				WebElement btnprint = wd.findElement(By.xpath("//input[@id='ctl00_ctpContent_Button1']"));
-				Thread.sleep(1000);
-				a.moveToElement(btnprint).release().perform();
-				Thread.sleep(1000);
-				btnprint.click();
-				//Thread.sleep(3000);
-				
-				// Execute the print command silently
-               // wd.executeScript("window.print();");
-                //Thread.sleep(10000);  // Wait for print to complete
-				
-				
-				//a.sendKeys(Keys.ENTER).build().perform();
+                // PRINT Batch Report
+                wd.executeScript("window.print();");
+                Thread.sleep(10000);
 
-				// Close Batch Report
-				
-				Thread.sleep(7000);
-				wd.findElement(By.xpath("//div[@id='me']//img[@id='Img121']")).click();
-				Thread.sleep(2000);
-				//wd.findElement(By.xpath("//input[@id='ctl00_ctpContent_btnSearch']")).click();
-				//Thread.sleep(4000);
-                */
-                
-				
-                // Click On Challan
+                // RENAME Batch PDF
+                String pdfFolder = "D:\\ME_Data\\Excel\\PDF\\";
+                String sourcePath = pdfFolder + "untitled.pdf"; // Or "download.pdf"
+                String targetPath = pdfFolder + batchNo + "_" + thaneName + "_Batch.pdf";
+
+                File sourceFile = new File(sourcePath);
+                File targetFile = new File(targetPath);
+                int waitCount = 0;
+                while (!sourceFile.exists() && waitCount < 20) {
+                    Thread.sleep(1000);
+                    waitCount++;
+                }
+                if (sourceFile.renameTo(targetFile)) {
+                    System.out.println("Saved PDF as: " + targetFile.getName());
+                } else {
+                    System.out.println("Failed to rename Batch PDF for: " + thaneName);
+                }
+
+                Thread.sleep(7000);
+                wd.findElement(By.xpath("//div[@id='me']//img[@id='Img121']")).click();
+                Thread.sleep(2000);
+
                 wd.findElement(By.xpath("//input[@id='ctl00_ctpContent_gvBatchList_ctl02_imgNoteC1']")).click();
-
-                
-                // Click Save Button for Challan
                 wd.findElement(By.xpath("//input[@id='ctl00_ctpContent_btnSave']")).click();
                 Thread.sleep(2000);
-
-                // Click Print Button for Challan
                 wd.findElement(By.xpath("//input[@id='ctl00_ctpContent_btnPrint']")).click();
                 Thread.sleep(3000);
-                // Execute the print command silently
-                wd.executeScript("window.print();");
-                Thread.sleep(10000);  // Wait for print to complete
 
-                // Navigate back after print
+                // PRINT Challan
+                wd.executeScript("window.print();");
+                Thread.sleep(10000);
+
+                // RENAME Challan PDF
+                String challanTargetPath = pdfFolder + batchNo + "_" + thaneName + "_Challan.pdf";
+                File challanTargetFile = new File(challanTargetPath);
+                waitCount = 0;
+                while (!sourceFile.exists() && waitCount < 20) {
+                    Thread.sleep(1000);
+                    waitCount++;
+                }
+                if (sourceFile.renameTo(challanTargetFile)) {
+                    System.out.println("Saved PDF as: " + challanTargetFile.getName());
+                } else {
+                    System.out.println("Failed to rename Challan PDF for: " + thaneName);
+                }
+
                 wd.navigate().back();
                 Thread.sleep(2000);
                 wd.navigate().back();
                 Thread.sleep(2000);
-                 
-                
-                // Write status in Excel
+
                 cell = sheet.getRow(i).createCell(6);
                 cell.setCellValue("PASS");
-
-                FileOutputStream outputStream = new FileOutputStream("E:\\User\\Desktop\\W445_W446_AD\\Extra_AIC_01.xlsx");
+                FileOutputStream outputStream = new FileOutputStream("D:\\ME_Data\\Excel\\Book_01.xlsx");
                 wb.write(outputStream);
 
             } catch (Exception e) {
-                // Write fail status in Excel
+                e.printStackTrace();
                 cell = sheet.getRow(i).createCell(6);
                 cell.setCellValue("Fail");
-                FileOutputStream outputStream = new FileOutputStream("E:\\User\\Desktop\\W445_W446_AD\\Extra_AIC_02.xlsx");
+                FileOutputStream outputStream = new FileOutputStream("D:\\ME_Data\\Excel\\Book_02.xlsx");
                 wb.write(outputStream);
 
-                // Restart loop on failure
                 WebElement Batch = wd.findElement(By.xpath("(//i[@class='fa fa-caret-down'])[3]"));
                 Batch.click();
                 Thread.sleep(4000);
