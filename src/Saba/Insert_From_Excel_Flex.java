@@ -21,7 +21,7 @@ import method.Utility;
 
 
 
-public class Insert_from_Excel extends Utility
+public class Insert_From_Excel_Flex extends Utility
 {
 
 	public static void main(String[] args) throws IOException, InterruptedException 

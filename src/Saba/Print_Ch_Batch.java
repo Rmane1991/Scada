@@ -44,65 +44,83 @@ public class Print_Ch_Batch extends Utility {
         Thread.sleep(1000);
 
         System.out.println("No of Record Found Into Excel :- " + rowCount);
+        
+        String currentStep = "";
 
-        for (int i = 1; i <= rowCount; i++) {
+        for (int i = 335; i <= rowCount; i++) {
             try {
+            	
+            	currentStep = "Reading Batch No from Excel";
                 String batchNo = sheet.getRow(i).getCell(0).getRawValue();
 
                 // Enter Batch No From
+                currentStep = "Entering Batch No From For Batch Report";
                 WebElement BatchFrom = wd.findElement(By.id("ctl00_ctpContent_txtBatchFrom"));
                 BatchFrom.clear();
                 BatchFrom.sendKeys(batchNo);
 
                 // Enter Batch No To
+                currentStep = "Entering Batch No To For Batch Report";
                 WebElement BatchTo = wd.findElement(By.id("ctl00_ctpContent_txtBatchTo"));
                 BatchTo.clear();
                 BatchTo.sendKeys(batchNo);
 
                 // Click Search
+                currentStep = "Clicking Search Button for Batch Report";
                 wd.findElement(By.id("ctl00_ctpContent_btnSearch")).click();
-                Thread.sleep(4000);
+                Thread.sleep(3000);
 
                 // Click Print Batch Report
+                currentStep = "Clicking Print Batch Report";
                 wd.findElement(By.id("ctl00_ctpContent_gvBatchList_ctl02_imgPrint")).click();
-                Thread.sleep(3000);
-                wd.executeScript("window.print();");
                 Thread.sleep(4000);
+                wd.executeScript("window.print();");
+                Thread.sleep(3000);
                 wd.navigate().back();
                 Thread.sleep(2000);
 
                 // Repeat Search for Challan
+                currentStep = "Entering Batch No From For Challan";
                 WebElement BatchFrom_CH = wd.findElement(By.id("ctl00_ctpContent_txtBatchFrom"));
                 BatchFrom_CH.clear();
                 BatchFrom_CH.sendKeys(batchNo);
 
+                currentStep = "Entering Batch No To For Challan";
                 WebElement BatchTo_CH = wd.findElement(By.id("ctl00_ctpContent_txtBatchTo"));
                 BatchTo_CH.clear();
                 BatchTo_CH.sendKeys(batchNo);
 
+                currentStep = "Clicking Search Button for Challan";
                 wd.findElement(By.id("ctl00_ctpContent_btnSearch")).click();
                 Thread.sleep(2000);
 
                 // Click on Challan icon
+                currentStep = "Clicking Challan Icon for Printing";
                 wd.findElement(By.id("ctl00_ctpContent_gvBatchList_ctl02_imgNoteC1")).click();
                 Thread.sleep(3000);
 
-                try {
-                    // Save Challan if Save button is available
+                try 
+                {
+                	currentStep = "Click To Save Challan";
                     wd.findElement(By.id("ctl00_ctpContent_btnSave")).click();
                     Thread.sleep(2000);
+                    currentStep = "Click To Print Challan";
                     wd.findElement(By.id("ctl00_ctpContent_btnPrint")).click();
-                } catch (Exception e) {
-                    // If Save not needed, click only Print
+                } catch (Exception e) 
+                {
+                	currentStep = "Save button not found, trying to print directly";
                     wd.findElement(By.id("ctl00_ctpContent_btnPrint")).click();
                 }
 
-                Thread.sleep(3000);
+                Thread.sleep(4000);
+                currentStep = "Printing Challan";
                 wd.executeScript("window.print();");
-                Thread.sleep(10000);
+                Thread.sleep(3000);
 
+                currentStep = "Back to Batch List First";
                 wd.navigate().back();
                 Thread.sleep(2000);
+                currentStep = "Back to Batch List Second";
                 wd.navigate().back();
                 Thread.sleep(2000);
 
@@ -111,11 +129,14 @@ public class Print_Ch_Batch extends Utility {
                 FileOutputStream outputStream = new FileOutputStream("D:\\ME_Data\\Excel\\Book_01.xlsx");
                 wb.write(outputStream);
 
-            } catch (Exception e) {
+            } catch (Exception e) 
+            {
+            	currentStep = "Back to Batch List Second";
+            	System.out.println(i+ " : " + currentStep);
                 e.printStackTrace();
                 cell = sheet.getRow(i).createCell(6);
-                cell.setCellValue("Fail");
-                FileOutputStream outputStream = new FileOutputStream("D:\\ME_Data\\Excel\\Book_02.xlsx");
+                cell.setCellValue("Fail:-"+ currentStep);
+                FileOutputStream outputStream = new FileOutputStream("D:\\ME_Data\\Excel\\Book_01.xlsx");
                 wb.write(outputStream);
 
                 try {
@@ -124,7 +145,7 @@ public class Print_Ch_Batch extends Utility {
                     Thread.sleep(4000);
                     wd.findElement(By.linkText("Batch List")).click();
                 } catch (Exception ex) {
-                    // silently ignore and continue
+                    
                 }
                 continue;
             }
