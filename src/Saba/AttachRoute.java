@@ -15,6 +15,7 @@ import org.openqa.selenium.interactions.Actions;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import method.Utility;
 
+
 public class AttachRoute extends Utility {
 
 	public static void main(String[] args) throws InterruptedException, IOException {
@@ -36,7 +37,7 @@ public class AttachRoute extends Utility {
 		wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 
 		// Create Object
-		Utility selUtil = new Utility();
+		//Utility selUtil = new Utility();
 		XSSFCell cell = null;
 
 		// Login
@@ -83,7 +84,7 @@ public class AttachRoute extends Utility {
 			
 			//Set Route Name
 			WebElement route = wd.findElement(By.xpath("//select[@id='ctl00_cphBody_drpRoute']"));
-			selUtil.Dropdown(route, sheet.getRow(i).getCell(1).getStringCellValue());
+			Dropdown(route, sheet.getRow(i).getCell(1).getStringCellValue());
 			Thread.sleep(1000);
 
 			// Click on Map

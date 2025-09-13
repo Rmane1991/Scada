@@ -11,7 +11,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 import org.openqa.selenium.Alert;
@@ -137,7 +136,7 @@ public static void waitForLoaderToDisappear(WebDriver driver)
 	
 	
 	
-	public void Dropdown(WebElement cat, String visible)
+	public static void Dropdown(WebElement cat, String visible)
 	{
 		// WebElement myEleDp = wd.findElement(By.id(cat));
 		Select dropdown = new Select(cat);// For select Hardware Type

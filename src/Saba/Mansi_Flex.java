@@ -16,6 +16,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
+
 import io.github.bonigarcia.wdm.WebDriverManager;
 import method.Utility;
 
@@ -25,7 +26,7 @@ public class Mansi_Flex extends Utility
 	public static void main(String[] args) throws IOException, InterruptedException 
 	{
 		
-		FileInputStream fis = new FileInputStream("D:\\New_Host\\Pending.xlsx");
+		FileInputStream fis = new FileInputStream("E:\\User\\Documents\\Vijay_Data\\Manaci-Flex-May.xlsx");
 
 		// Read Excel sheet
 		XSSFWorkbook wb = new XSSFWorkbook(fis);
@@ -45,7 +46,7 @@ public class Mansi_Flex extends Utility
 		
 		//Zoom Out to 75%
 		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--force-device-scale-factor=0.75");
+		//options.addArguments("--force-device-scale-factor=0.75");
 		WebDriver wd = new ChromeDriver(options);
 
 		
@@ -56,7 +57,7 @@ public class Mansi_Flex extends Utility
 		
 		// Login
 		login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "mansiom", "mansiom#25", "3105251205");
-		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "meflex", "meflex", "0375921468");
+		//login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "meflex", "meflex", "5230184697");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "rbcrmc", "rbc#24", "213241237");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "land23", "land@23", "5471936802");
 		Thread.sleep(2000);
@@ -67,7 +68,7 @@ public class Mansi_Flex extends Utility
 		// For read and write data from excel
 		System.out.println("No of Record Found Into Excel :- " + rowCount);
 
-		for (int i = 12; i <= rowCount; i++)
+		for (int i = 1024; i <= rowCount; i++)
 			{
 			try 
 			{
@@ -91,7 +92,7 @@ public class Mansi_Flex extends Utility
 				if(isDisaplyed(By.xpath("//tr[@class='gridHeader']"),wd,5)==false)
 				{
 					cell.setCellValue("Batch Not found");
-					FileOutputStream outputStream = new FileOutputStream("D:\\New_Host\\Pending_01.xlsx");
+					FileOutputStream outputStream = new FileOutputStream("E:\\User\\Documents\\Vijay_Data\\Manaci-Flex-May_01.xlsx");
 					wb.write(outputStream);
 					Thread.sleep(1000);
 					System.out.println(i +":-" + sheet.getRow(i).getCell(0).getRawValue() + ": Batch Not found");
@@ -156,42 +157,42 @@ public class Mansi_Flex extends Utility
 				//Create Raw
 				WebElement P_Qty = wd.findElement(By.id("ctl00_cphBody_txtPrintProductionQty"));
 				P_Qty.sendKeys(sheet.getRow(i).getCell(4).getRawValue());
-				Thread.sleep(1500);
+				Thread.sleep(2500);
 				a.click().sendKeys(Keys.ENTER).perform(); 
 				waitForLoaderToDisappear(wd);
-				Thread.sleep(1500);
+				Thread.sleep(4000);
 				WebElement Lbl_ok_Create_Row= wd.findElement(By.xpath("/html/body/div[6]/p "));
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 				if(Lbl_ok_Create_Row.getText().contains("same time already exist"))
 				{
 					cell.setCellValue("Time Problem");
-					FileOutputStream outputStream = new FileOutputStream("D:\\New_Host\\Pending_01.xlsx");
+					FileOutputStream outputStream = new FileOutputStream("E:\\User\\Documents\\Vijay_Data\\Manaci-Flex-May_01.xlsx");
 					wb.write(outputStream);
 					wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
-					Thread.sleep(1000);
-					wd.findElement(By.id("ctl00_cphBody_btn_clear")).click();
 					Thread.sleep(2000);
+					wd.findElement(By.id("ctl00_cphBody_btn_clear")).click();
+					Thread.sleep(3000);
 					continue;
 				}
 				
 				Thread.sleep(2000);
 				wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
-				Thread.sleep(1500);
+				Thread.sleep(2500);
 				
 				//Enter Grade
 				WebElement myEle_grade = wd.findElement(By.id("ctl00_cphBody_ddlReceipeCode"));
 				Select dropdown_grade = new Select(myEle_grade);// For select Hardware Type
 				dropdown_grade.selectByVisibleText(sheet.getRow(i).getCell(5).getStringCellValue());
 				waitForLoaderToDisappear(wd);
-				Thread.sleep(1500);
+				Thread.sleep(2500);
 				
 				if (isDisaplyed(By.xpath("/html/body/div[6]/div[7]/div/button"), wd, 10) == true);
 				wd.findElement(By.xpath("/html/body/div[6]/div[7]/div/button")).click();
 				waitForLoaderToDisappear(wd);
-				Thread.sleep(1500);
+				Thread.sleep(2500);
 				//Click Submit Button
 				wd.findElement(By.id("ctl00_cphBody_btn_submit")).click();
-				Thread.sleep(2500);
+				Thread.sleep(3500);
 				waitForLoaderToDisappear(wd);
 				
 				if (isDisaplyed(By.xpath("/html/body/div[6]/div[7]/div/button"), wd, 15) == true);
@@ -210,7 +211,7 @@ public class Mansi_Flex extends Utility
 					cell.setCellValue("Fail");
 				}
 				 
-				FileOutputStream outputStream = new FileOutputStream("D:\\New_Host\\Pending_01.xlsx");
+				FileOutputStream outputStream = new FileOutputStream("E:\\User\\Documents\\Vijay_Data\\Manaci-Flex-May_01.xlsx");
 				wb.write(outputStream);
 				
 				System.out.println(i +":-" + sheet.getRow(i).getCell(0).getRawValue() + ":" + text);

@@ -28,7 +28,7 @@ public class Insert_from_Excel extends Utility
 	{
 		
 
-		FileInputStream fis = new FileInputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227.xlsx");
+		FileInputStream fis = new FileInputStream("E:\\Eclipse_Excel\\C270_FLex.xlsx");
 
 		
 		XSSFWorkbook wb = new XSSFWorkbook(fis);
@@ -51,8 +51,8 @@ public class Insert_from_Excel extends Utility
 		XSSFCell cell = null;
 		
 		// Login
-		login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "mansiom", "mansiom#25", "3105251205");
-		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "meflex", "meflex", "0375921468");
+		//login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "mansiom", "mansiom#25", "3105251205");
+		login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "meflex", "meflex", "6042819375");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "rbcrmc", "rbc#24", "213241237");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "land23", "land@23", "5471936802");
 		Thread.sleep(2000);
@@ -66,7 +66,7 @@ public class Insert_from_Excel extends Utility
 		// For read and write data from excel
 		System.out.println("No of Record Found Into Excel :- " + rowCount);
 
-		for (int i = 1398; i <= rowCount; i++) //for (int i = rowCount; i >= 1; i--)
+		for (int i = 1; i <= rowCount; i++) //for (int i = rowCount; i >= 1; i--)
 			{
 			try 
 			{
@@ -92,17 +92,17 @@ public class Insert_from_Excel extends Utility
 				//wd.findElement(By.xpath("//input[@id='ctl00_cphBody_txtPrintTruckDriver']")).clear();
 				
 				
-				/*
+				
 				//Enter Customer Name
 				WebElement myEle_Cust = wd.findElement(By.id("ctl00_cphBody_drpCustomer"));
 				Thread.sleep(2000);
-				selUtil.Dropdown(myEle_Cust, sheet.getRow(i).getCell(2).getStringCellValue());
+				Dropdown(myEle_Cust, sheet.getRow(i).getCell(2).getStringCellValue());
 				Thread.sleep(3000);
 				
 				
 				// Enter Site Name
 				WebElement myEle_Site = wd.findElement(By.xpath("//select[@id='ctl00_cphBody_drpsite']"));
-				selUtil.Dropdown(myEle_Site, sheet.getRow(i).getCell(3).getStringCellValue());
+				Dropdown(myEle_Site, sheet.getRow(i).getCell(3).getStringCellValue());
 				Thread.sleep(3000);
 				
 				/*
@@ -174,14 +174,14 @@ public class Insert_from_Excel extends Utility
 				wd.findElement(By.id("ctl00_cphBody_btn_submit")).click();
 				Thread.sleep(2500);
 				waitForLoaderToDisappear(wd);
-				//if (selUtil.isDisaplyed(By.xpath("//p[contains(text(),'Batch created successfully.')]"), wd, 15) == true);
-				if (isDisaplyed(By.xpath("//p[contains(text(),'Batch Updated successfully.')]"), wd, 15) == true);
+				if (isDisaplyed(By.xpath("//p[contains(text(),'Batch created successfully.')]"), wd, 15) == true);
+				//if (isDisaplyed(By.xpath("//p[contains(text(),'Batch Updated successfully.')]"), wd, 15) == true);
 				
 
 				cell = sheet.getRow(i).createCell(6);
 
-				//WebElement print_msg = wd.findElement(By.xpath("//p[contains(text(),'Batch created successfully.')]"));
-				WebElement print_msg = wd.findElement(By.xpath("//p[contains(text(),'Batch Updated successfully.')]"));
+				WebElement print_msg = wd.findElement(By.xpath("//p[contains(text(),'Batch created successfully.')]"));
+				//WebElement print_msg = wd.findElement(By.xpath("//p[contains(text(),'Batch Updated successfully.')]"));
 				String text = print_msg.getText();
 
 				if (print_msg.isDisplayed()) 
@@ -189,7 +189,7 @@ public class Insert_from_Excel extends Utility
 					cell.setCellValue("PASS");
 				} 
 				 
-				FileOutputStream outputStream = new FileOutputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
+				FileOutputStream outputStream = new FileOutputStream("E:\\Eclipse_Excel\\C270_FLex_01.xlsx");
 				wb.write(outputStream);
 				
 				System.out.println(i +":-" + sheet.getRow(i).getCell(0).getRawValue() + ":" + text);
@@ -205,7 +205,7 @@ public class Insert_from_Excel extends Utility
 				
 				cell = sheet.getRow(i).createCell(6);
 				cell.setCellValue("FAIL");
-				FileOutputStream outputStream = new FileOutputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227_02.xlsx");
+				FileOutputStream outputStream = new FileOutputStream("E:\\Eclipse_Excel\\C270_FLex_02.xlsx");
 				wb.write(outputStream);
 				
 				Thread.sleep(3000);

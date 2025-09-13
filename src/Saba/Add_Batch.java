@@ -14,7 +14,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
 import method.Utility;
 
@@ -40,7 +39,7 @@ public class Add_Batch  extends Utility {
 		wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
 		// Create Object
-		Utility selUtil = new Utility();
+		//Utility selUtil = new Utility();
 		XSSFCell cell = null;
 
 		// Login
@@ -76,12 +75,12 @@ public class Add_Batch  extends Utility {
 
 				// Select Customer
 				WebElement Cust_Name = wd.findElement(By.xpath("//select[@id='ctl00_cphBody_drpDownCustomer']"));
-				selUtil.Dropdown(Cust_Name, sheet.getRow(i).getCell(2).getStringCellValue());
+				Dropdown(Cust_Name, sheet.getRow(i).getCell(2).getStringCellValue());
 				Thread.sleep(1000);
 
 				// Select Site
 				WebElement Name_Name = wd.findElement(By.xpath("//select[@id='ctl00_cphBody_drpDownSite']"));
-				selUtil.Dropdown(Name_Name, sheet.getRow(i).getCell(3).getStringCellValue());
+				Dropdown(Name_Name, sheet.getRow(i).getCell(3).getStringCellValue());
 				//Select dropdown = new Select(Name_Name);// For select Hardware Type
 				//dropdown.selectByIndex(1);
 				
@@ -96,7 +95,7 @@ public class Add_Batch  extends Utility {
 				
 				// Select Vehicle
 				WebElement Vehicle_No = wd.findElement(By.xpath("//select[@id='ctl00_cphBody_drpDownVehicleNo']"));
-				selUtil.Dropdown(Vehicle_No, sheet.getRow(i).getCell(4).getStringCellValue());
+				Dropdown(Vehicle_No, sheet.getRow(i).getCell(4).getStringCellValue());
 				Thread.sleep(1000);
 				
 				// Select Driver
