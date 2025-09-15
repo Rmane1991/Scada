@@ -24,31 +24,28 @@ public class SavePDF_Ch_BatchReport_Name_Update extends Utility {
 	
 	
 	
-	public static File waitForPdfDownload(String downloadDir, String expectedFileName, int timeoutSec) throws InterruptedException {
-	    File file = new File(downloadDir, expectedFileName);
-	    int waited = 0;
-	    while (!file.exists() && waited < timeoutSec) {
-	        Thread.sleep(1000);
-	        waited++;
-	    }
+	public static File waitForPdfDownload(String downloadDir, String expectedFileName, int timeoutSec)
+			throws InterruptedException {
+		File file = new File(downloadDir, expectedFileName);
+		int waited = 0;
+		while (!file.exists() && waited < timeoutSec) {
+			Thread.sleep(1000);
+			waited++;
+		}
 
-	    if (file.exists()) {
-	        System.out.println("✅ File found: " + file.getAbsolutePath());
-	        return file;
-	    } else {
-	        System.out.println("❌ File not found after waiting " + timeoutSec + " seconds.");
-	        return null;
-	    }
+		if (file.exists()) {
+			System.out.println("✅ File found: " + file.getAbsolutePath());
+			return file;
+		} else {
+			System.out.println("❌ File not found after waiting " + timeoutSec + " seconds.");
+			return null;
+		}
 	}
 
 
     public static void main(String[] args) throws IOException, InterruptedException, AWTException 
     {
-    	
-    	
-    	
         FileInputStream fis = new FileInputStream("D:\\ME_Data\\Excel\\Book.xlsx");
-
         @SuppressWarnings("resource")
         XSSFWorkbook wb = new XSSFWorkbook(fis);
         XSSFSheet sheet = wb.getSheet("Sheet1");
@@ -141,7 +138,6 @@ public class SavePDF_Ch_BatchReport_Name_Update extends Utility {
                         System.out.println("❌ Rename failed.");
                     }
                 }
-                
                
 		        Thread.sleep(4000);
 
