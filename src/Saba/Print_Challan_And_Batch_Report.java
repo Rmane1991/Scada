@@ -15,13 +15,16 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import method.Utility;
 
-public class Print_Challan extends Utility
+public class Print_Challan_And_Batch_Report extends Utility
 {
 
 	public static void main(String[] args) throws IOException, InterruptedException, AWTException 
 	{
-		FileInputStream fis = new FileInputStream("E:\\Eclipse_Excel\\Me_Print.xlsx");
-		String Updatecement="Yes";
+		
+		String excelpath="D:\\ME_Data\\Excel\\Book";
+		//String Updatecement="NO";
+
+		FileInputStream fis = new FileInputStream(excelpath+".xlsx");
 
 		@SuppressWarnings("resource")
 		XSSFWorkbook wb = new XSSFWorkbook(fis);
@@ -36,14 +39,10 @@ public class Print_Challan extends Utility
 		options.addArguments("--kiosk-printing");
 		// options.addArguments("--disable-print-preview");
 		ChromeDriver wd = new ChromeDriver(options);
-
-		// WebDriver wd = new ChromeDriver(options);
-
 		wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
 		// Create Object
 		
-		//Utility selUtil = new Utility();
 		XSSFCell cell = null;
 		login_BMC(wd, "http://www.bmc-scada.online/app/default.aspx", "ME", "MRMA!@489");
 
@@ -69,7 +68,7 @@ public class Print_Challan extends Utility
 			try {
 
 				// Enter Batch No
-
+				
 				WebElement BatchFrom = wd.findElement(By.xpath("//input[@id='ctl00_ctpContent_txtBatchFrom']"));
 				BatchFrom.sendKeys(sheet.getRow(i).getCell(0).getRawValue());
 
@@ -105,7 +104,7 @@ public class Print_Challan extends Utility
 				
 
 				wd.findElement(By.xpath("//input[@id='ctl00_ctpContent_btnSearch']")).click();
-				Thread.sleep(4000);
+				Thread.sleep(3000);
 				
 
 				// CLick On Challan
@@ -114,23 +113,23 @@ public class Print_Challan extends Utility
 
 				// Click Save Button for challan
 				
-				if(Updatecement=="Yes")
-				{
-					WebElement txt_Cement = wd.findElement(By.xpath("//input[@id='ctl00_ctpContent_txtmincemqty']"));
-					String Existing_Value = txt_Cement.getDomAttribute("value");
-					if(Existing_Value.contains("445"))
-					{
-						System.out.println("All Ready 445 cement For Row No:"+i);
-					}
-					
-					else
-					{
-						txt_Cement.clear();
-						txt_Cement.sendKeys("445");
-					}
-					
-				}
-				
+//				if(Updatecement=="Yes")
+//				{
+//					WebElement txt_Cement = wd.findElement(By.xpath("//input[@id='ctl00_ctpContent_txtmincemqty']"));
+//					String Existing_Value = txt_Cement.getDomAttribute("value");
+//					if(Existing_Value.contains("445"))
+//					{
+//						System.out.println("All Ready 445 cement For Row No:"+i);
+//					}
+//					
+//					else
+//					{
+//						txt_Cement.clear();
+//						txt_Cement.sendKeys("445");
+//					}
+//					
+//				}
+//				
 				
 				
 				
@@ -148,10 +147,11 @@ public class Print_Challan extends Utility
 				wd.navigate().back();
 				Thread.sleep(2000);
 				System.out.println(i + ": Challan Print Done for batch no :-" + sheet.getRow(i).getCell(0).getRawValue());
+				
 				cell = sheet.getRow(i).createCell(3);
 				cell.setCellValue("PASS");
 
-				FileOutputStream outputStream = new FileOutputStream("E:\\Eclipse_Excel\\Me_Print_01.xlsx");
+				FileOutputStream outputStream = new FileOutputStream(excelpath+"_01.xlsx");
 				wb.write(outputStream);
 
 			} 
@@ -160,13 +160,13 @@ public class Print_Challan extends Utility
 				// Write Into excel
 				cell = sheet.getRow(i).createCell(3);
 				cell.setCellValue("Fail");
-				FileOutputStream outputStream = new FileOutputStream("E:\\Eclipse_Excel\\Me_Print_02.xlsx");
+				FileOutputStream outputStream = new FileOutputStream(excelpath+"_02.xlsx");
 				wb.write(outputStream);
 
 				// For restart Loop Again
 				WebElement Batch = wd.findElement(By.xpath("(//i[@class='fa fa-caret-down'])[3]"));
 				Batch.click();
-				Thread.sleep(4000);
+				Thread.sleep(3000);
 				wd.findElement(By.linkText("Batch List")).click();
 				continue;
 			}

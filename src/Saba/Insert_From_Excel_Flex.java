@@ -27,24 +27,22 @@ public class Insert_From_Excel_Flex extends Utility
 	public static void main(String[] args) throws IOException, InterruptedException 
 	{
 		
+		String excelpath="D:\\ME_Data\\Excel\\Book";
 
-		FileInputStream fis = new FileInputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227.xlsx");
+		FileInputStream fis = new FileInputStream(excelpath+".xlsx");
 
 		
 		XSSFWorkbook wb = new XSSFWorkbook(fis);
-        // Read Excel sheet
-		//XSSFSheet sheet = wb.getSheet("Flex");
+        
+		// Read Excel sheet
 		XSSFSheet sheet = wb.getSheet("Sheet1");
 		int rowCount = sheet.getPhysicalNumberOfRows()-1;// sheet.getLastRowNum() - sheet.getFirstRowNum();
 
 		// Web Driver setup
 		WebDriverManager.chromedriver().setup();
-		
-		//ChromeOptions options = new ChromeOptions();
-		//options.addArguments("--remote-allow-origins=*");
 		WebDriver wd = new ChromeDriver();
 		wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-		((ChromeDriver) wd).executeScript("document.body.style.zoom='75%'");
+		
 		
 		// Create Object
 		//Utility selUtil = new Utility();
@@ -56,17 +54,14 @@ public class Insert_From_Excel_Flex extends Utility
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "rbcrmc", "rbc#24", "213241237");
 		//selUtil.login_Flex(wd, "http://www.bmc-scada.online/flex/login.aspx", "land23", "land@23", "5471936802");
 		Thread.sleep(2000);
-		
-		
-		
-		
+
 		// Mouse action
 		Actions a = new Actions(wd);
 
 		// For read and write data from excel
 		System.out.println("No of Record Found Into Excel :- " + rowCount);
 
-		for (int i = 1398; i <= rowCount; i++) //for (int i = rowCount; i >= 1; i--)
+		for (int i = 1; i <= rowCount; i++) //for (int i = rowCount; i >= 1; i--)
 			{
 			try 
 			{
@@ -132,9 +127,8 @@ public class Insert_From_Excel_Flex extends Utility
 				//WebElement Str=wd.findElement(By.xpath("//span[@id='ctl00_cphBody_lblPrintBatcherName']"));
 				//Str.click();
 				
+				//Clear Previous Qty to ENter new qty
 				
-				
-				//Enter Production Qty
 				wd.findElement(By.id("ctl00_cphBody_txtPrintProductionQty")).clear();
 				if (isInvisible(By.xpath("//img[@id='ctl00_cphBody_imgLoader']"), wd, 20) == true);
 				Thread.sleep(2500);
@@ -142,23 +136,24 @@ public class Insert_From_Excel_Flex extends Utility
 				Thread.sleep(1500);
 				waitForLoaderToDisappear(wd);
 				
-				//Create Raw
+				//Enter Production Qty and Create Raw
 				WebElement P_Qty = wd.findElement(By.id("ctl00_cphBody_txtPrintProductionQty"));
 				P_Qty.sendKeys(sheet.getRow(i).getCell(4).getRawValue());
 				Thread.sleep(1500);
 				a.click().sendKeys(Keys.ENTER).perform(); 
 				waitForLoaderToDisappear(wd);
 				Thread.sleep(1500);
-				//if (selUtil.isDisaplyed(By.xpath("//button[contains(text(),'OK')]")
+				if (isDisaplyed(By.xpath("//button[contains(text(),'OK')]") ,wd, 25) == true)
 				//div[@class='sa-confirm-button-container']
-				if (isDisaplyed(By.xpath("//div[@class='sa-confirm-button-container']"), wd, 25) == true);
+				//if (isDisaplyed(By.xpath("//div[@class='sa-confirm-button-container']"), wd, 25) == true);
 				
 				//if (selUtil.isDisaplyed(By.xpath("//div[@class='sweet-alert showSweetAlert visible']//button[contains(text(),'OK')]"), wd, 15000) == true);
 				Thread.sleep(2000);
 				wd.findElement(By.xpath("//button[contains(text(),'OK')]")).click();
 				Thread.sleep(1500);
 				
-				//Enter Grade
+				//Enter Grade which want to apply
+				
 				WebElement myEle_grade = wd.findElement(By.id("ctl00_cphBody_ddlReceipeCode"));
 				Select dropdown_grade = new Select(myEle_grade);// For select Hardware Type
 				dropdown_grade.selectByVisibleText(sheet.getRow(i).getCell(5).getStringCellValue());
@@ -170,18 +165,19 @@ public class Insert_From_Excel_Flex extends Utility
 				wd.findElement(By.xpath("//button[contains(text(),'OK')]")).click();
 				waitForLoaderToDisappear(wd);
 				Thread.sleep(1500);
-				//Click Submit Button
+				
+				//Click Submit Button to update details 
 				wd.findElement(By.id("ctl00_cphBody_btn_submit")).click();
 				Thread.sleep(2500);
 				waitForLoaderToDisappear(wd);
-				//if (selUtil.isDisaplyed(By.xpath("//p[contains(text(),'Batch created successfully.')]"), wd, 15) == true);
-				if (isDisaplyed(By.xpath("//p[contains(text(),'Batch Updated successfully.')]"), wd, 15) == true);
+				if (isDisaplyed(By.xpath("//p[contains(text(),'Batch created successfully.')]"), wd, 15) == true);
+				//if (isDisaplyed(By.xpath("//p[contains(text(),'Batch Updated successfully.')]"), wd, 15) == true);
 				
 
 				cell = sheet.getRow(i).createCell(6);
 
-				//WebElement print_msg = wd.findElement(By.xpath("//p[contains(text(),'Batch created successfully.')]"));
-				WebElement print_msg = wd.findElement(By.xpath("//p[contains(text(),'Batch Updated successfully.')]"));
+				WebElement print_msg = wd.findElement(By.xpath("//p[contains(text(),'Batch created successfully.')]"));
+				//WebElement print_msg = wd.findElement(By.xpath("//p[contains(text(),'Batch Updated successfully.')]"));
 				String text = print_msg.getText();
 
 				if (print_msg.isDisplayed()) 
@@ -189,7 +185,7 @@ public class Insert_From_Excel_Flex extends Utility
 					cell.setCellValue("PASS");
 				} 
 				 
-				FileOutputStream outputStream = new FileOutputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227_01.xlsx");
+				FileOutputStream outputStream = new FileOutputStream(excelpath+"_01.xlsx");
 				wb.write(outputStream);
 				
 				System.out.println(i +":-" + sheet.getRow(i).getCell(0).getRawValue() + ":" + text);
@@ -198,14 +194,13 @@ public class Insert_From_Excel_Flex extends Utility
 
 				wd.findElement(By.id("ctl00_cphBody_btn_clear")).click();
 				Thread.sleep(2000);
-				//Thread.sleep(60000);
 			} 
 			catch (Exception e) 
 			{
 				
 				cell = sheet.getRow(i).createCell(6);
 				cell.setCellValue("FAIL");
-				FileOutputStream outputStream = new FileOutputStream("E:\\Manaci_Vijay\\Feb_March__Data_Manci_1565_To_3227_02.xlsx");
+				FileOutputStream outputStream = new FileOutputStream(excelpath+"_02.xlsx");
 				wb.write(outputStream);
 				
 				Thread.sleep(3000);

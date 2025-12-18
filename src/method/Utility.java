@@ -125,7 +125,11 @@ public class Utility
 		wd.findElement(By.id("txtRefCode")).sendKeys(refcode);
 		wd.findElement(By.id("btnSubmit")).click();
 		System.out.println("Login Done");
-
+		
+		//Zoom Out set to 75%
+		JavascriptExecutor js = (JavascriptExecutor) wd;
+		js.executeScript("document.body.style.zoom='75%'");
+		
 	}
 
 	public void print(WebDriver wd, String id, String cat) {
@@ -143,6 +147,8 @@ public class Utility
 		Thread.sleep(2000);
 		wd.findElement(By.xpath("//a[@id='dtlstModules_ctl00_lblModuleName']")).click();
 		Thread.sleep(2000);
+		JavascriptExecutor js = (JavascriptExecutor) wd;
+		js.executeScript("document.body.style.zoom='75%'");
 
 		System.out.println("Login Done");
 
